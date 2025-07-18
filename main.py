@@ -1,34 +1,18 @@
-# bmi_api.py
-print("FastAPI started!")
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
 
-# 定义输入数据模型
-class BMIRequest(BaseModel):
-    height: float  # 单位：米
-    weight: float  # 单位：公斤
+class NumberInput(BaseModel):
+    a: float
+    b: float
 
-# 计算 BMI 函数
-def calculate_bmi(height, weight):
-    bmi = weight / (height ** 2)
-    status = "正常"
-    if bmi < 18.5:
-        status = "偏瘦"
-    elif 18.5 <= bmi < 24.9:
-        status = "正常"
-    elif 25 <= bmi < 29.9:
-        status = "超重"
+@app.post("/compare")
+def compare_numbers(data: NumberInput):
+    if data.a > data.b:
+        result = f"{data.a} is greater than {data.b}"
+    elif data.a < data.b:
+        result = f"{data.b} is greater than {data.a}"
     else:
-        status = "肥胖"
-    return round(bmi, 2), status
-
-# 设置 API 路由
-@app.post("/predict_bmi")
-def predict_bmi(data: BMIRequest):
-    bmi, status = calculate_bmi(data.height, data.weight)
-    return {
-        "BMI值": bmi,
-        "状态": status
-    }
+        result = "Both numbers are equal"
+    return {"result": result}
