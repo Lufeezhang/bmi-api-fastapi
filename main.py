@@ -1,5 +1,5 @@
 # bmi_api.py
-
+print("FastAPI started!")
 from fastapi import FastAPI
 from pydantic import BaseModel
 
